@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-export const registerUserSchema = Joi.object({
+const registerUserSchema = Joi.object({
   email: Joi.string()
     .pattern(new RegExp('^\\S+@\\S+\\.\\S+$'))
     .required()
@@ -26,3 +26,18 @@ export const registerUserSchema = Joi.object({
       'any.required': 'Name object is required',
     }),
 })
+
+const loginUserSchema = Joi.object({
+  email: Joi.string()
+    .pattern(new RegExp('^\\S+@\\S+\\.\\S+$'))
+    .required()
+    .messages({
+      'string.pattern.base': 'Please enter a valid email address',
+      'any.required': 'Email is required',
+    }),
+  password: Joi.string().required().messages({
+    'any.required': 'Password is required',
+  }),
+})
+
+export default { registerUserSchema, loginUserSchema }

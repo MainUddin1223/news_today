@@ -6,10 +6,16 @@ const RegisterUserSchema = new Schema<IRegisterUser>({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   password: {
     type: String,
     required: true,
+  },
+  role: {
+    type: String,
+    enum: ['admin', 'user', 'reporter'],
+    default: 'user',
   },
   name: {
     firstName: {
@@ -23,4 +29,5 @@ const RegisterUserSchema = new Schema<IRegisterUser>({
   },
 })
 
-export const RegisterModel = mongoose.model('User', RegisterUserSchema)
+const User = mongoose.model('User', RegisterUserSchema)
+export default User

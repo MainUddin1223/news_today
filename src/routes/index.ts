@@ -6,7 +6,7 @@ const router = express.Router()
 const defaultRoutes = [{ path: '/auth', route: authRouter.authRouter }]
 
 defaultRoutes.forEach(route => {
-  const apis = route.route.stack.map((path: any) => {
+  const apis = route.route.stack.map(path => {
     return { path: path.route.path, methods: path.route.methods }
   })
   apis.map(api => {
