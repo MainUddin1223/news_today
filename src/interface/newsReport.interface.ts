@@ -1,3 +1,5 @@
+import { JwtPayload } from 'jsonwebtoken'
+
 export interface INewsReport {
   title: string
   subTitle: string[]
@@ -7,4 +9,5 @@ export interface INewsReport {
   reporter: string
   status: string
   reporterEmail: string
+  user: JwtPayload
 }

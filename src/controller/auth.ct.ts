@@ -2,11 +2,12 @@ import { Request, Response } from 'express'
 import userService from '../services/auth.services'
 import authValidatorSchema from '../validator/auth.validator'
 import User from '../models/auth.mo'
+import { AuthenticatedRequest } from '../interface/auth.interface'
 
 const { userRegisterService, loginUserService } = userService
 const { registerUserSchema, loginUserSchema } = authValidatorSchema
 
-const registerUser = async (req: Request, res: Response) => {
+const registerUser = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { error } = registerUserSchema.validate(req.body)
     if (error) {
@@ -15,12 +16,10 @@ const registerUser = async (req: Request, res: Response) => {
     const email = req.body.email
     const existingUser = await User.findOne({ email })
     if (existingUser) {
-      return res
-        .status(400)
-        .send({
-          success: false,
-          message: 'User already exists with this email.',
-        })
+      return res.status(400).send({
+        success: false,
+        message: 'User already exists with this email.',
+      })
     }
     const result = await userRegisterService(req.body)
     res.status(200).send({ result })
