@@ -1,9 +1,13 @@
 import express from 'express'
 import authRouter from './auth.rt'
+import newsRouter from './newsReport.rt'
 
 const router = express.Router()
 
-const defaultRoutes = [{ path: '/auth', route: authRouter.authRouter }]
+const defaultRoutes = [
+  { path: '/auth', route: authRouter.authRouter },
+  { path: '/news', route: newsRouter.newsRouter },
+]
 
 defaultRoutes.forEach(route => {
   const apis = route.route.stack.map(path => {
