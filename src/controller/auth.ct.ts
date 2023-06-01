@@ -35,10 +35,17 @@ const loginUser = async (req: Request, res: Response) => {
       return res.status(400).send({ error: error.message })
     }
     const result = await loginUserService(req.body)
-    res.status(result.status).send({ result })
+    res.status(result.status).send(result)
   } catch (error) {
     console.log(error)
   }
 }
+const afterLoginAuth = async (req: AuthenticatedRequest, res: Response) => {
+  const email = req.user?.email || ''
+  const existingUser = await User.findOne({ email }).select(
+    '_id name email role'
+  )
+  res.status(200).send(existingUser)
+}
 
-export default { registerUser, loginUser }
+export default { registerUser, loginUser, afterLoginAuth }

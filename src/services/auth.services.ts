@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import config from '../config'
 const saltRounds = 10
 const { jwt_access_token } = config
+
 const hashingPassword = async (password: string) => {
   const hashPassword = await bcrypt.genSalt(saltRounds)
   return bcrypt.hash(password, hashPassword)

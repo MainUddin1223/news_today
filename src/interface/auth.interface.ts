@@ -16,5 +16,5 @@ export interface ILoginUser {
   password: string
 }
 export interface AuthenticatedRequest extends Request {
-  user?: JwtPayload
+  user?: JwtPayload | undefined
 }
