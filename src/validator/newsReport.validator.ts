@@ -4,7 +4,7 @@ const newsReportSchema = Joi.object({
   title: Joi.string().required().messages({
     'any.required': 'title is required',
   }),
-  subTitle: Joi.array().items(Joi.string().required()).min(1).max(3).messages({
+  subtitle: Joi.array().items(Joi.string().required()).min(1).max(3).messages({
     'array.base': 'Subtitle must be an array.',
     'array.empty': 'Subtitle cannot be empty.',
     'array.min': 'Subtitle must have at least {#limit} item.',

@@ -1,10 +1,10 @@
 import { Response } from 'express'
 import newsReportValidator from '../validator/newsReport.validator'
-import newsReportServices from '../services/newsReport.services'
 import { AuthenticatedRequest } from '../interface/auth.interface'
+import { postReport } from '../services/reporter.services'
+import NewsReport from '../models/newsReport.mo'
 
 const { newsReportSchema } = newsReportValidator
-const { postReport } = newsReportServices
 
 const postNewsReport = async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -18,4 +18,15 @@ const postNewsReport = async (req: AuthenticatedRequest, res: Response) => {
     console.log(error)
   }
 }
-export { postNewsReport }
+
+const getMyAllReport = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const reporterId = req.user?.id
+    const result = await NewsReport.find({ reporterId })
+    res.status(200).send({ result })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export { postNewsReport, getMyAllReport }

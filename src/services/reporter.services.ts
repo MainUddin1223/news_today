@@ -3,11 +3,11 @@ import NewsReport from '../models/newsReport.mo'
 
 const postReport = async (data: INewsReport) => {
   try {
-    const { title, subTitle, photos, description, category, status, user } =
+    const { title, subtitle, photos, description, category, status, user } =
       data
     const report = new NewsReport({
       title,
-      subTitle,
+      subtitle,
       reporterId: user.id,
       photos,
       description,
@@ -23,4 +23,4 @@ const postReport = async (data: INewsReport) => {
     return error
   }
 }
-export default { postReport }
+export { postReport }

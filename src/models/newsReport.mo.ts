@@ -14,7 +14,7 @@ const newsReportSchema = new Schema<INewsReport>(
       ref: 'User',
       required: true,
     },
-    subTitle: {
+    subtitle: {
       type: [],
       required: true,
     },
