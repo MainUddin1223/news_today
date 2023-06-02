@@ -1,9 +1,6 @@
 import express from 'express'
-import newsReport from '../controller/newsReport.rt'
-import middleware from '../middleware/verifyAuth'
-
-const { postNewsReport } = newsReport
-const { verifyReporter } = middleware
+import { verifyReporter } from '../middleware/verifyAuth'
+import { postNewsReport } from '../controller/newsReport.rt'
 
 const router = express.Router()
 

@@ -18,4 +18,4 @@ const postNewsReport = async (req: AuthenticatedRequest, res: Response) => {
     console.log(error)
   }
 }
-export default { postNewsReport }
+export { postNewsReport }
