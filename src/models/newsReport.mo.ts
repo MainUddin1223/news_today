@@ -35,6 +35,10 @@ const newsReportSchema = new Schema<INewsReport>(
       type: String,
       default: '',
     },
+    feedback: {
+      type: String,
+      default: '',
+    },
     category: {
       type: String,
       required: true,

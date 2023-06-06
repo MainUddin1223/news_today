@@ -5,6 +5,7 @@ export interface IRegisterUser {
   password: string
   role: string
   token?: string
+  category?: string
   name: {
     firstName: string
     lastName: string

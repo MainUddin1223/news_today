@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import newsReportValidator from '../validator/newsReport.validator'
 import { AuthenticatedRequest } from '../interface/auth.interface'
-import { postReport } from '../services/reporter.services'
+import { reporterService } from '../services/reporter.services'
 import NewsReport from '../models/newsReport.mo'
 
 const { newsReportSchema } = newsReportValidator
@@ -12,14 +12,17 @@ const postNewsReport = async (req: AuthenticatedRequest, res: Response) => {
     if (error) {
       return res.status(400).send({ error: error.message })
     }
-    const result = await postReport({ ...req.body, user: req.user })
+    const result = await reporterService.postReport({
+      ...req.body,
+      user: req.user,
+    })
     res.status(200).send({ result })
   } catch (error) {
     console.log(error)
   }
 }
 
-const getMyAllReport = async (req: AuthenticatedRequest, res: Response) => {
+const getMyAllReports = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const reporterId = req.user?.id
     const result = await NewsReport.find({ reporterId })
@@ -29,4 +32,37 @@ const getMyAllReport = async (req: AuthenticatedRequest, res: Response) => {
   }
 }
 
-export { postNewsReport, getMyAllReport }
+const getReportsCategory = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const category = 'sports'
+    // const category = req.body.category
+    const result = await NewsReport.find({ category })
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const reviewReportsByEditor = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const result = await reporterService.reviewReportsService({
+      ...req.body,
+      user: req.user,
+    })
+    if (!result) {
+      res.status(400).send({ success: false, message: 'Something went wrong' })
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const ReportsController = {
+  postNewsReport,
+  getMyAllReports,
+  getReportsCategory,
+  reviewReportsByEditor,
+}

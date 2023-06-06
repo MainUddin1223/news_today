@@ -1,4 +1,5 @@
-import { INewsReport } from '../interface/newsReport.interface'
+import mongoose from 'mongoose'
+import { INewsReport, IReviewNews } from '../interface/newsReport.interface'
 import NewsReport from '../models/newsReport.mo'
 
 const postReport = async (data: INewsReport) => {
@@ -23,4 +24,15 @@ const postReport = async (data: INewsReport) => {
     return error
   }
 }
-export { postReport }
+
+const reviewReportsService = async (data: IReviewNews) => {
+  const { reportId, status, feedback, user } = data
+  const objectIdReportId = new mongoose.Types.ObjectId(reportId)
+  const result = await NewsReport.findOneAndUpdate(
+    { _id: objectIdReportId, category: user.category },
+    { $set: { status, feedback, reviewerId: user.id } },
+    { new: true }
+  )
+  return result
+}
+export const reporterService = { postReport, reviewReportsService }

@@ -12,6 +12,14 @@ export interface INewsReport {
   category: string
   reporter: string
   status: string
+  feedback: string
   reporterEmail: string
+  user: JwtPayload
+}
+
+export interface IReviewNews {
+  status: string
+  feedback: string
+  reportId: string
   user: JwtPayload
 }

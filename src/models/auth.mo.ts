@@ -14,8 +14,13 @@ const RegisterUserSchema = new Schema<IRegisterUser>({
   },
   role: {
     type: String,
-    enum: ['admin', 'user', 'reporter'],
+    enum: ['admin', 'user', 'reporter', 'editor'],
     default: 'user',
+  },
+
+  category: {
+    type: String,
+    default: '',
   },
   name: {
     firstName: {
