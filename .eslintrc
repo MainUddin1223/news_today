@@ -7,7 +7,10 @@
   },
   "plugins": ["@typescript-eslint"],
   // HERE
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "extends": ["eslint:recommended",
+  "plugin:@typescript-eslint/recommended",
+  "plugin:@typescript-eslint/recommended-requiring-type-checking",
+  "prettier"],
 
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
