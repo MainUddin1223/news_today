@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 export interface INewsReport {
   title: string
   reporterId: mongoose.Types.ObjectId
-  subtitle: string[]
+  subtitle: string
   photos: string[]
   description: string
   publisedDate: Date
@@ -14,7 +14,6 @@ export interface INewsReport {
   status: string
   feedback: string
   reporterEmail: string
-  user: JwtPayload
 }
 
 export interface IReviewNews {

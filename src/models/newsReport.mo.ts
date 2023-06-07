@@ -15,7 +15,7 @@ const newsReportSchema = new Schema<INewsReport>(
       required: true,
     },
     subtitle: {
-      type: [],
+      type: String,
       required: true,
     },
     status: {
@@ -43,16 +43,8 @@ const newsReportSchema = new Schema<INewsReport>(
       type: String,
       required: true,
     },
-    reporter: {
-      type: String,
-      required: true,
-    },
     publisedDate: {
       type: Date,
-    },
-    reporterEmail: {
-      type: String,
-      required: true,
     },
   },
   { timestamps: true }
