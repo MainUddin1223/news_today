@@ -1,6 +1,6 @@
 import { JwtPayload } from 'jsonwebtoken'
 import { Request } from 'express'
-export interface IRegisterUser {
+export type IRegisterUser = {
   email: string
   password: string
   role: string
@@ -12,10 +12,11 @@ export interface IRegisterUser {
   }
 }
 
-export interface ILoginUser {
+export type ILoginUser = {
   email: string
   password: string
 }
-export interface AuthenticatedRequest extends Request {
+
+export type AuthenticatedRequest = Request & {
   user?: JwtPayload | undefined
 }

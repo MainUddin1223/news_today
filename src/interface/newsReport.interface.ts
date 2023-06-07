@@ -1,7 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken'
 import mongoose from 'mongoose'
 
-export interface INewsReport {
+export type INewsReport = {
   title: string
   reporterId: mongoose.Types.ObjectId
   subtitle: string
@@ -15,9 +15,17 @@ export interface INewsReport {
   feedback: string
   newsType: string
   reporterEmail: string
+  user: {
+    email: string
+    name: {
+      firstName: string
+      lastName: string
+    }
+    id: string
+  }
 }
 
-export interface IReviewNews {
+export type IReviewNews = {
   status: string
   feedback: string
   reportId: string

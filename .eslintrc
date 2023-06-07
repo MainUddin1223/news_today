@@ -1,3 +1,4 @@
+// .eslintrc
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -5,21 +6,16 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "prettier"
-  ],
+  // HERE
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-    "@typescript-eslint/no-unsafe-assignment": "error",
-    "@typescript-eslint/no-unsafe-call": "error",
-    "@typescript-eslint/no-unsafe-member-access": "error",
     "no-unused-vars": "error",
     "no-unused-expressions": "error"
   },
+
   "env": {
     "browser": true,
     "es2021": true,
