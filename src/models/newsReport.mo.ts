@@ -43,6 +43,11 @@ const newsReportSchema = new Schema<INewsReport>(
       type: String,
       required: true,
     },
+    newsType: {
+      type: String,
+      enum: ['featured', 'spotlight', 'normal', 'top'],
+      default: 'normal',
+    },
     publisedDate: {
       type: Date,
     },

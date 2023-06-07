@@ -13,6 +13,7 @@ export interface INewsReport {
   reporter: string
   status: string
   feedback: string
+  newsType: string
   reporterEmail: string
 }
 
