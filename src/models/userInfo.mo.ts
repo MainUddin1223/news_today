@@ -21,6 +21,10 @@ const userInfoSchema = new Schema({
     enum: ['user', 'pending', 'approved', 'suspended'],
     default: 'user',
   },
+  invitation: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const UserInfo = model('user-info', userInfoSchema)
