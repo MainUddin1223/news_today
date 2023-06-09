@@ -1,11 +1,10 @@
-import mongoose from 'mongoose'
-import { INewsReport, IReviewNews } from '../interface/newsReport.interface'
-import NewsReport from '../models/newsReport.mo'
+import { INewsReport, IUpdateReport } from '../interface/newsReport.interface';
+import NewsReport from '../models/newsReport.mo';
 
-const postReport = async (data: INewsReport) => {
+const createReport = async (data: INewsReport) => {
   try {
     const { title, subtitle, photos, description, category, status, user } =
-      data
+      data;
     const report = new NewsReport({
       title,
       subtitle,
@@ -13,26 +12,24 @@ const postReport = async (data: INewsReport) => {
       photos,
       description,
       category,
-      reporter: `${user.name.firstName} ${user.name.lastName}`,
       status,
-      reporterEmail: user.email,
-    })
-    const result = await report.save()
-    return result
+    });
+    const result = await report.save();
+    return result;
   } catch (error: unknown) {
-    console.log(error)
-    return error
+    console.log(error);
+    return error;
   }
-}
+};
 
-const reviewReportsService = async (data: IReviewNews) => {
-  const { reportId, status, feedback, user } = data
-  const objectIdReportId = new mongoose.Types.ObjectId(reportId)
+const updateReport = async (data: IUpdateReport) => {
+  const { title, subtitle, photos, description, reportId } = data;
   const result = await NewsReport.findOneAndUpdate(
-    { _id: objectIdReportId, category: user.category },
-    { $set: { status, feedback, reviewerId: user.id } },
+    { reportId, status: 'pending' || 'rejected' },
+    { $set: { status: 'pending', title, subtitle, photos, description } },
     { new: true }
-  )
-  return result
-}
-export const reporterService = { postReport, reviewReportsService }
+  );
+  return result;
+};
+
+export const reporterService = { createReport, updateReport };

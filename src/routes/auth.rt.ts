@@ -1,12 +1,13 @@
-import express from 'express'
-import auth from '../controller/auth.ct'
-import { verifyAuth } from '../middleware/verifyAuth'
+import express from 'express';
+import { verifyAuth } from '../middleware/verifyAuth';
+import { authApi } from '../controller/auth.ct';
 
-const { registerUser, loginUser, afterLoginAuth } = auth
+const router = express.Router();
 
-const router = express.Router()
+router.route('/signup').post(authApi.registerUser);
+router
+  .route('/login')
+  .post(authApi.loginUser)
+  .get(verifyAuth, authApi.afterLoginAuth);
 
-router.route('/register').post(registerUser)
-router.route('/login').post(loginUser).get(verifyAuth, afterLoginAuth)
-
-export default { authRouter: router }
+export default { authRouter: router };

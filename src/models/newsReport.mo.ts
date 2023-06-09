@@ -1,7 +1,7 @@
-import mongoose from 'mongoose'
-import { INewsReport } from '../interface/newsReport.interface'
+import mongoose from 'mongoose';
+import { INewsReport } from '../interface/newsReport.interface';
 
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 
 const newsReportSchema = new Schema<INewsReport>(
   {
@@ -24,7 +24,7 @@ const newsReportSchema = new Schema<INewsReport>(
       default: 'pending',
     },
     photos: {
-      type: [],
+      type: String,
       required: true,
     },
     description: {
@@ -50,11 +50,12 @@ const newsReportSchema = new Schema<INewsReport>(
     },
     publisedDate: {
       type: Date,
+      default: Date.now,
     },
   },
   { timestamps: true }
-)
+);
 
-const NewsReport = mongoose.model('news-report', newsReportSchema)
+const NewsReport = mongoose.model('news-report', newsReportSchema);
 
-export default NewsReport
+export default NewsReport;
