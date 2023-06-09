@@ -1,5 +1,5 @@
 # news_today
-## This is the server of my news project
+## This is the server of my news_today project
 
 ### Technologies 
 
