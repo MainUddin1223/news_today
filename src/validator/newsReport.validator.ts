@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const newsReportSchema = Joi.object({
   title: Joi.string().required().messages({
@@ -18,5 +18,5 @@ const newsReportSchema = Joi.object({
   description: Joi.string().required().messages({
     'any.required': 'description is required',
   }),
-})
-export default { newsReportSchema }
+});
+export default { newsReportSchema };

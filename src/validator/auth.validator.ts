@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const registerUserSchema = Joi.object({
   email: Joi.string()
@@ -25,7 +25,7 @@ const registerUserSchema = Joi.object({
     .messages({
       'any.required': 'Name object is required',
     }),
-})
+});
 
 const loginUserSchema = Joi.object({
   email: Joi.string()
@@ -38,6 +38,6 @@ const loginUserSchema = Joi.object({
   password: Joi.string().required().messages({
     'any.required': 'Password is required',
   }),
-})
+});
 
-export default { registerUserSchema, loginUserSchema }
+export default { registerUserSchema, loginUserSchema };

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import { IRegisterUser } from '../interface/auth.interface'
-const Schema = mongoose.Schema
+import mongoose from 'mongoose';
+import { IRegisterUser } from '../interface/auth.interface';
+const Schema = mongoose.Schema;
 
 const RegisterUserSchema = new Schema<IRegisterUser>({
   email: {
@@ -22,7 +22,7 @@ const RegisterUserSchema = new Schema<IRegisterUser>({
       required: true,
     },
   },
-})
+});
 
-const User = mongoose.model('User', RegisterUserSchema)
-export default User
+const User = mongoose.model('User', RegisterUserSchema);
+export default User;

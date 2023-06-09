@@ -1,32 +1,32 @@
-import { NextFunction, Response } from 'express'
-import jwt from 'jsonwebtoken'
-import config from '../config'
+import { NextFunction, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import config from '../config';
 import {
   AuthenticatedRequest,
   IRegisterUser,
-} from '../interface/auth.interface'
+} from '../interface/auth.interface';
 
 const verifyAuth = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(' ')[1]
+  const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
   try {
     const decoded = jwt.verify(
       token,
       config.jwt_access_token as string
-    ) as IRegisterUser
-    req.user = decoded
-    next()
+    ) as IRegisterUser;
+    req.user = decoded;
+    next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid token' })
+    return res.status(401).json({ message: 'Invalid token' });
   }
-}
+};
 
 const verifyRole = (allowedRoles: string[]) => {
   return async (
@@ -34,32 +34,32 @@ const verifyRole = (allowedRoles: string[]) => {
     res: Response,
     next: NextFunction
   ) => {
-    const token = req.headers.authorization?.split(' ')[1] // Assuming token is sent in the 'Authorization' header
+    const token = req.headers.authorization?.split(' ')[1]; // Assuming token is sent in the 'Authorization' header
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' })
+      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     try {
       const decoded = jwt.verify(
         token,
         config.jwt_access_token as string
-      ) as IRegisterUser
-      req.user = decoded
+      ) as IRegisterUser;
+      req.user = decoded;
       if (!allowedRoles.includes(req.user.role)) {
-        return res.status(401).json({ message: 'Unauthorized' })
+        return res.status(401).json({ message: 'Unauthorized' });
       }
-      next()
+      next();
     } catch (error) {
-      return res.status(401).json({ message: 'Invalid token' })
+      return res.status(401).json({ message: 'Invalid token' });
     }
-  }
-}
+  };
+};
 
-const verifyReporter = verifyRole(['reporter'])
-const verifyEditor = verifyRole(['subeditor', 'editor', 'admin'])
-const verifyChiefEditor = verifyRole(['editor', 'admin'])
-const verifyAdmin = verifyRole(['admin'])
+const verifyReporter = verifyRole(['reporter']);
+const verifyEditor = verifyRole(['subeditor', 'editor', 'admin']);
+const verifyChiefEditor = verifyRole(['editor', 'admin']);
+const verifyAdmin = verifyRole(['admin']);
 
 export {
   verifyAuth,
@@ -67,4 +67,4 @@ export {
   verifyEditor,
   verifyChiefEditor,
   verifyAdmin,
-}
+};
