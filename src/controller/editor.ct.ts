@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { AuthenticatedRequest } from '../interface/auth.interface';
 import { editorServices } from '../services/editor.services';
+import NewsReport from '../models/newsReport.mo';
 
 const reviewReportsByEditor = async (
   req: AuthenticatedRequest,
@@ -20,7 +21,17 @@ const reviewReportsByEditor = async (
     console.log(error);
   }
 };
+const getallReports = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const category = req.user;
+    const result = await NewsReport.find({ category });
+    res.status(200).send(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const editorController = {
   reviewReportsByEditor,
+  getallReports,
 };
