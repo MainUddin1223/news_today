@@ -34,8 +34,7 @@ const verifyRole = (allowedRoles: string[]) => {
     res: Response,
     next: NextFunction
   ) => {
-    const token = req.headers.authorization?.split(' ')[1]; // Assuming token is sent in the 'Authorization' header
-
+    const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized' });
     }
@@ -56,8 +55,13 @@ const verifyRole = (allowedRoles: string[]) => {
   };
 };
 
-const verifyReporter = verifyRole(['reporter']);
-const verifyEditor = verifyRole(['subeditor', 'editor', 'admin']);
+const verifyReporter = verifyRole([
+  'reporter',
+  'sub-editor',
+  'editor',
+  'admin',
+]);
+const verifyEditor = verifyRole(['sub-editor', 'editor', 'admin']);
 const verifyChiefEditor = verifyRole(['editor', 'admin']);
 const verifyAdmin = verifyRole(['admin']);
 

@@ -8,7 +8,7 @@ const newsReportSchema = Joi.object({
     'any.required': 'title is required',
   }),
   photos: Joi.array().items(Joi.string().required()).min(1).max(3).messages({
-    'array.base': 'Photos must be an array.',
+    'array.base': 'Photos must be an array',
     'array.empty': 'Photos cannot be empty.',
     'array.min': 'Photos must have at least {#limit} item.',
     'array.max': 'Photos must have at most {#limit} items.',

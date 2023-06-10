@@ -1,14 +1,15 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import userService from '../services/auth.services';
 import authValidatorSchema from '../validator/auth.validator';
 import User from '../models/auth.mo';
 import { AuthenticatedRequest } from '../interface/auth.interface';
+import catchAsync from '../errorHandler/catchAsync';
 
 const { userRegisterService, loginUserService } = userService;
 const { registerUserSchema, loginUserSchema } = authValidatorSchema;
 
-const registerUser = async (req: AuthenticatedRequest, res: Response) => {
-  try {
+const registerUser = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const { error } = registerUserSchema.validate(req.body);
     if (error) {
       return res.status(400).send({ error: error.message });
@@ -23,29 +24,60 @@ const registerUser = async (req: AuthenticatedRequest, res: Response) => {
     }
     const result = await userRegisterService(req.body);
     res.status(200).send({ result });
-  } catch (error) {
-    console.log(error);
+    next();
   }
-};
+);
 
-const loginUser = async (req: Request, res: Response) => {
-  try {
+const loginUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const { error } = loginUserSchema.validate(req.body);
     if (error) {
       return res.status(400).send({ error: error.message });
     }
     const result = await loginUserService(req.body);
     res.status(result.status).send(result);
-  } catch (error) {
-    console.log(error);
+    next();
   }
-};
-const afterLoginAuth = async (req: AuthenticatedRequest, res: Response) => {
-  const email = req.user?.email || '';
-  const existingUser = await User.findOne({ email }).select(
-    '_id name email role'
-  );
-  res.status(200).send(existingUser);
-};
+);
+const afterLoginAuth = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const email = req.user?.email || '';
+    const existingUser = await User.aggregate([
+      {
+        $match: {
+          email,
+        },
+      },
+      {
+        $limit: 1,
+      },
+      {
+        $lookup: {
+          from: 'user-infos',
+          localField: '_id',
+          foreignField: 'userId',
+          as: 'userinfo',
+        },
+      },
+      {
+        $addFields: {
+          userinfo: { $arrayElemAt: ['$userinfo', 0] },
+        },
+      },
+      {
+        $project: {
+          email: 1,
+          name: 1,
+          userinfo: {
+            role: 1,
+          },
+        },
+      },
+    ]);
+
+    res.status(200).send(existingUser[0]);
+    next();
+  }
+);
 
 export const authApi = { registerUser, loginUser, afterLoginAuth };

@@ -20,6 +20,7 @@ export type ILoginUser = {
 export type IInviteForRole = {
   email: string;
   role: string;
+  category: string;
 };
 
 export type AuthenticatedRequest = Request & {

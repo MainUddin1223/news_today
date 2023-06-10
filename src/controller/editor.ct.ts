@@ -1,35 +1,32 @@
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { AuthenticatedRequest } from '../interface/auth.interface';
 import { editorServices } from '../services/editor.services';
 import NewsReport from '../models/newsReport.mo';
+import catchAsync from '../errorHandler/catchAsync';
 
-const reviewReportsByEditor = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
-  const reoportId = req.params.id as string;
-  try {
+const reviewReportsByEditor = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const reportId = req.params.id as string;
     const result = await editorServices.reviewReportService({
       ...req.body,
-      reoportId,
+      reportId,
       user: req.user,
     });
     if (!result) {
       res.status(400).send({ success: false, message: 'Something went wrong' });
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
-const getallReports = async (req: AuthenticatedRequest, res: Response) => {
-  try {
-    const category = req.user;
-    const result = await NewsReport.find({ category });
     res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
+    next();
   }
-};
+);
+const getallReports = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const user = req.user;
+    const result = await NewsReport.find({ category: user?.category });
+    res.status(200).send(result);
+    next();
+  }
+);
 
 export const editorController = {
   reviewReportsByEditor,

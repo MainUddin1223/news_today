@@ -1,25 +1,27 @@
 import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 
-export type IUpdateReport = {
-  reportId?: string;
-  title: string;
-  subtitle: string;
-  photos: string;
-  description: string;
-};
 export type IUserPaylod = {
   email: string;
   name: {
     firstName: string;
     lastName: string;
   };
-  id: string;
+  _id: string;
+  category?: string;
 };
 
+export type IUpdateReport = {
+  reportId?: string;
+  title: string;
+  subtitle: string;
+  photos: string[];
+  description: string;
+  user?: IUserPaylod;
+};
 export type INewsReport = IUpdateReport & {
   reporterId: mongoose.Types.ObjectId;
-  publisedDate: Date;
+  publishedDate: Date;
   reviewerId: string;
   category: string;
   reporter: string;

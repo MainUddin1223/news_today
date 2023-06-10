@@ -3,16 +3,15 @@ import NewsReport from '../models/newsReport.mo';
 
 const createReport = async (data: INewsReport) => {
   try {
-    const { title, subtitle, photos, description, category, status, user } =
-      data;
+    const { title, subtitle, photos, description, user } = data;
     const report = new NewsReport({
       title,
       subtitle,
-      reporterId: user.id,
+      reporterId: user._id,
       photos,
       description,
-      category,
-      status,
+      category: user.category,
+      status: 'pending',
     });
     const result = await report.save();
     return result;
@@ -23,9 +22,9 @@ const createReport = async (data: INewsReport) => {
 };
 
 const updateReport = async (data: IUpdateReport) => {
-  const { title, subtitle, photos, description, reportId } = data;
+  const { title, subtitle, photos, description, reportId, user } = data;
   const result = await NewsReport.findOneAndUpdate(
-    { reportId, status: 'pending' || 'rejected' },
+    { _id: reportId, reporterId: user?._id, status: 'pending' || 'rejected' },
     { $set: { status: 'pending', title, subtitle, photos, description } },
     { new: true }
   );

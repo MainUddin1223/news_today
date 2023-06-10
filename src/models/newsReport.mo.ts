@@ -24,7 +24,7 @@ const newsReportSchema = new Schema<INewsReport>(
       default: 'pending',
     },
     photos: {
-      type: String,
+      type: [],
       required: true,
     },
     description: {
@@ -48,7 +48,7 @@ const newsReportSchema = new Schema<INewsReport>(
       enum: ['featured', 'spotlight', 'normal', 'top'],
       default: 'normal',
     },
-    publisedDate: {
+    publishedDate: {
       type: Date,
       default: Date.now,
     },

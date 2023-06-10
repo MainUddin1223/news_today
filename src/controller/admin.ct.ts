@@ -1,54 +1,93 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { AuthenticatedRequest } from '../interface/auth.interface';
-import User from '../models/auth.mo';
 import NewsReport from '../models/newsReport.mo';
-import { inviteForRole, approveForRole } from '../services/admin.services';
+import { inviteForRole } from '../services/admin.services';
+import UserInfo from '../models/userInfo.mo';
+import catchAsync from '../errorHandler/catchAsync';
 
-const inviteEmployeeForRole = async (req: Request, res: Response) => {
-  const data = req.body;
-  try {
+const inviteEmployeeForRole = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const data = req.body;
     const result = await inviteForRole(data);
     res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
+    next();
   }
-};
-const approveEmplyeeForRole = async (req: Request, res: Response) => {
-  const id = req.query.id as string;
-  try {
-    const result = await approveForRole(id);
-    res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
-  }
-};
+);
+// const approveEmplyeeForRole = async (req: Request, res: Response) => {
+//   const id = req.query.id as string;
+//   try {
+//     const result = await approveForRole(id);
+//     res.status(200).send(result);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
-const getStuffByRole = async (req: AuthenticatedRequest, res: Response) => {
-  const role = req.query;
-  try {
-    const result = await User.find({ role });
+const getStuffByRole = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const { role, limit = 50, page = 1 } = req.query;
+    const limitValue = parseInt(limit.toString());
+    const pageValue = parseInt(page.toString());
+    const result = await UserInfo.aggregate([
+      {
+        $match: {
+          role: role,
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $addFields: {
+          user: { $arrayElemAt: ['$user', 0] },
+        },
+      },
+      {
+        $project: {
+          userId: 0,
+          'user.id': 0,
+          'user.password': 0,
+        },
+      },
+      {
+        $skip: (pageValue - 1) * limitValue,
+      },
+      {
+        $limit: limitValue,
+      },
+    ]);
     res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
+    next();
   }
-};
+);
 
-const getReportsByDateAndStatus = async (
-  req: AuthenticatedRequest,
-  res: Response
-) => {
-  const { status, date } = req.query;
-  try {
-    const result = await NewsReport.find({ status, createdAT: date });
+const getReportsByStatus = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const { status } = req.query;
+    const result = await NewsReport.aggregate([
+      {
+        $match: {
+          status,
+        },
+      },
+      {
+        $sort: {
+          publishedDate: -1,
+        },
+      },
+    ]);
     res.status(200).send(result);
-  } catch (error) {
-    console.log(error);
+    next();
   }
-};
+);
 
 export const andminRoutes = {
   getStuffByRole,
-  getReportsByDateAndStatus,
+  getReportsByStatus,
   inviteEmployeeForRole,
-  approveEmplyeeForRole,
 };

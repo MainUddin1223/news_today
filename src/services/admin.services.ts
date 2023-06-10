@@ -7,7 +7,14 @@ const inviteForRole = async (data: IInviteForRole) => {
   if (user) {
     const userInfo = await UserInfo.findOneAndUpdate(
       { userId: user._id },
-      { $set: { invitation: true, role: data.role, approval: 'pending' } },
+      {
+        $set: {
+          invitation: true,
+          role: data.role,
+          category: data.category,
+          approval: 'pending',
+        },
+      },
       { new: true }
     );
     return userInfo;
@@ -16,13 +23,13 @@ const inviteForRole = async (data: IInviteForRole) => {
   }
 };
 
-const approveForRole = async (id: string) => {
-  const user = await UserInfo.findOneAndUpdate(
-    { _id: id },
-    { $set: { invitation: false, approval: 'approved' } }
-  );
+// const approveForRole = async (id: string) => {
+//   const user = await UserInfo.findOneAndUpdate(
+//     { _id: id },
+//     { $set: { invitation: false, approval: 'approved' } }
+//   );
 
-  return user;
-};
+//   return user;
+// };
 
-export { inviteForRole, approveForRole };
+export { inviteForRole };
