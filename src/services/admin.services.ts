@@ -1,3 +1,4 @@
+import ApiError from '../errorHandler/ApiError';
 import { IInviteForRole } from '../interface/auth.interface';
 import User from '../models/auth.mo';
 import UserInfo from '../models/userInfo.mo';
@@ -19,7 +20,8 @@ const inviteForRole = async (data: IInviteForRole) => {
     );
     return userInfo;
   } else {
-    return { status: 400, success: false, message: 'Something went wrong' };
+    throw new ApiError(500, 'Something went wrong');
+    // return { status: 400, success: false, message: 'Something went wrong' };
   }
 };
 

@@ -28,17 +28,20 @@ const registerUser = catchAsync(
   }
 );
 
-const loginUser = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { error } = loginUserSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send({ error: error.message });
-    }
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+  const { error } = loginUserSchema.validate(req.body);
+  if (error) {
+    return res.status(400).send({ error: error.message });
+  }
+  try {
     const result = await loginUserService(req.body);
     res.status(result.status).send(result);
     next();
+  } catch (error) {
+    next(error);
   }
-);
+};
+
 const afterLoginAuth = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const email = req.user?.email || '';

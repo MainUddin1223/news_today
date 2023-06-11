@@ -11,6 +11,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   let message = 'Internal server error';
   let errorMessages: IGenericMessages[] = [];
   console.log('--------------error---------------', error);
+
   if (error instanceof ApiError) {
     statusCode = error.statusCode;
     message = error?.message;
@@ -42,4 +43,5 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
 
   next();
 };
+
 export default globalErrorHandler;
