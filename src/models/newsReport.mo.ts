@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { INewsReport } from '../interface/newsReport.interface';
+import { news_status_enum, news_type_enum } from '../constant/constant';
 
 const Schema = mongoose.Schema;
 
@@ -20,7 +21,7 @@ const newsReportSchema = new Schema<INewsReport>(
     },
     status: {
       type: String,
-      enum: ['pending', 'approved', 'rejected', 'hidden'],
+      enum: news_status_enum,
       default: 'pending',
     },
     photos: {
@@ -43,9 +44,13 @@ const newsReportSchema = new Schema<INewsReport>(
       type: String,
       required: true,
     },
+    sub_category: {
+      type: String,
+      required: true,
+    },
     newsType: {
       type: String,
-      enum: ['featured', 'spotlight', 'normal', 'top'],
+      enum: news_type_enum,
       default: 'normal',
     },
     publishedDate: {

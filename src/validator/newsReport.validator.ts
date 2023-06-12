@@ -7,6 +7,7 @@ const newsReportSchema = Joi.object({
   subtitle: Joi.string().required().messages({
     'any.required': 'title is required',
   }),
+  sub_category: Joi.string().optional(),
   photos: Joi.array().items(Joi.string().required()).min(1).max(3).messages({
     'array.base': 'Photos must be an array',
     'array.empty': 'Photos cannot be empty.',

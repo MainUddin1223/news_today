@@ -51,6 +51,7 @@ const validateUser = async (email: string, password: string) => {
         _id,
         role: userInfo.role,
         category: userInfo.category,
+        sub_category: userInfo.sub_category,
         approval: userInfo.approval,
       };
       const token = jwt.sign(payload, jwt_access_token as string, {

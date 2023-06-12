@@ -5,7 +5,6 @@ import {
   AuthenticatedRequest,
   IRegisterUser,
 } from '../interface/auth.interface';
-
 const verifyAuth = (
   req: AuthenticatedRequest,
   res: Response,
@@ -61,6 +60,7 @@ const verifyReporter = verifyRole([
   'editor',
   'admin',
 ]);
+
 const verifyEditor = verifyRole(['sub-editor', 'editor', 'admin']);
 const verifyChiefEditor = verifyRole(['editor', 'admin']);
 const verifyAdmin = verifyRole(['admin']);

@@ -1,4 +1,10 @@
 import mongoose from 'mongoose';
+import {
+  user_approval_enum,
+  user_category_enum,
+  user_role_enum,
+  user_sub_category_enum,
+} from '../constant/constant';
 
 const { Schema, model } = mongoose;
 
@@ -9,25 +15,22 @@ const userInfoSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'user', 'reporter', 'sub-editor', 'editor'],
+    enum: user_role_enum,
     default: 'user',
   },
   category: {
     type: String,
-    enum: [
-      '',
-      'politics',
-      'sports',
-      'education',
-      'law&order',
-      'entertainment',
-      'geo-politics',
-    ],
+    enum: user_category_enum,
+    default: '',
+  },
+  sub_category: {
+    type: String,
+    enum: user_sub_category_enum,
     default: '',
   },
   approval: {
     type: String,
-    enum: ['not-applicable', 'pending', 'accepted', 'rejected', 'suspended'],
+    enum: user_approval_enum,
     default: 'not-applicable',
   },
   invitation: {

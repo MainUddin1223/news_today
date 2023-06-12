@@ -13,6 +13,7 @@ const inviteForRole = async (data: IInviteForRole) => {
           invitation: true,
           role: data.role,
           category: data.category,
+          sub_category: data.sub_category,
           approval: 'pending',
         },
       },
@@ -21,17 +22,7 @@ const inviteForRole = async (data: IInviteForRole) => {
     return userInfo;
   } else {
     throw new ApiError(500, 'Something went wrong');
-    // return { status: 400, success: false, message: 'Something went wrong' };
   }
 };
-
-// const approveForRole = async (id: string) => {
-//   const user = await UserInfo.findOneAndUpdate(
-//     { _id: id },
-//     { $set: { invitation: false, approval: 'approved' } }
-//   );
-
-//   return user;
-// };
 
 export { inviteForRole };

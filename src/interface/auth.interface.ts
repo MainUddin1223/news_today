@@ -21,6 +21,7 @@ export type IInviteForRole = {
   email: string;
   role: string;
   category: string;
+  sub_category: string[];
 };
 
 export type AuthenticatedRequest = Request & {

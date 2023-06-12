@@ -9,6 +9,7 @@ export type IUserPaylod = {
   };
   _id: string;
   category?: string;
+  sub_category?: string;
 };
 
 export type IUpdateReport = {
@@ -28,6 +29,7 @@ export type INewsReport = IUpdateReport & {
   status: string;
   feedback: string;
   newsType: string;
+  sub_category: string;
   reporterEmail: string;
   user: IUserPaylod;
 };

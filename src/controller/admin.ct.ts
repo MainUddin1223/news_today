@@ -13,15 +13,6 @@ const inviteEmployeeForRole = catchAsync(
     next();
   }
 );
-// const approveEmplyeeForRole = async (req: Request, res: Response) => {
-//   const id = req.query.id as string;
-//   try {
-//     const result = await approveForRole(id);
-//     res.status(200).send(result);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const getStuffByRole = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
