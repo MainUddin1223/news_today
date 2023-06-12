@@ -3,7 +3,6 @@ import {
   user_approval_enum,
   user_category_enum,
   user_role_enum,
-  user_sub_category_enum,
 } from '../constant/constant';
 
 const { Schema, model } = mongoose;
@@ -24,9 +23,8 @@ const userInfoSchema = new Schema({
     default: '',
   },
   sub_category: {
-    type: String,
-    enum: user_sub_category_enum,
-    default: '',
+    type: [],
+    default: [],
   },
   approval: {
     type: String,

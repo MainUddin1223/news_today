@@ -40,4 +40,4 @@ const loginUserSchema = Joi.object({
   }),
 });
 
-export default { registerUserSchema, loginUserSchema };
+export { registerUserSchema, loginUserSchema };

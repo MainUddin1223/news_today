@@ -1,19 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import userService from '../services/auth.services';
-import authValidatorSchema from '../validator/auth.validator';
 import User from '../models/auth.mo';
 import { AuthenticatedRequest } from '../interface/auth.interface';
 import catchAsync from '../errorHandler/catchAsync';
 
 const { userRegisterService, loginUserService } = userService;
-const { registerUserSchema, loginUserSchema } = authValidatorSchema;
-
 const registerUser = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { error } = registerUserSchema.validate(req.body);
-    if (error) {
-      return res.status(400).send({ error: error.message });
-    }
     const email = req.body.email;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -29,10 +22,6 @@ const registerUser = catchAsync(
 );
 
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-  const { error } = loginUserSchema.validate(req.body);
-  if (error) {
-    return res.status(400).send({ error: error.message });
-  }
   try {
     const result = await loginUserService(req.body);
     res.status(result.status).send(result);
