@@ -4,6 +4,7 @@ import newsRouter from './reporter.rt';
 import adminRouter from './admin.rt';
 import editorRouter from './editor.rt';
 import publicRouter from './public.rt';
+import subEditorRoute from './subEditor.rt';
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ const defaultRoutes = [
   { path: '/admin', route: adminRouter.adminRouter },
   { path: '/editor', route: editorRouter.editorRouter },
   { path: '/public', route: publicRouter.publicRouter },
+  { path: '/sub-editor', route: subEditorRoute.subEditorRoute },
 ];
 
 defaultRoutes.forEach(route => {

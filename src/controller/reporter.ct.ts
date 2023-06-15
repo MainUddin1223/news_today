@@ -6,18 +6,18 @@ import NewsReport from '../models/newsReport.mo';
 import UserInfo from '../models/userInfo.mo';
 import { IUserPaylod } from '../interface/newsReport.interface';
 import catchAsync from '../errorHandler/catchAsync';
+import mongoose from 'mongoose';
 
 const { newsReportSchema } = newsReportValidator;
 
 const invitation = catchAsync(
-  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const user = req.user as IUserPaylod;
     const result = await UserInfo.findOneAndUpdate(
       { userId: user._id, invitation: true },
       { $set: { status: 'accepted', approval: 'approved', invitation: false } }
     );
     res.status(200).send(result);
-    next();
   }
 );
 
@@ -72,12 +72,28 @@ const getReportsCategory = catchAsync(
 );
 
 const getReportById = catchAsync(
-  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const reportId = req.params.id as string;
 
     const result = await NewsReport.findOne({ _id: reportId });
     res.status(200).send(result);
-    next();
+  }
+);
+const getStatics = catchAsync(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const reportId = req.user?._id as mongoose.Types.ObjectId;
+    const result = await reporterService.getStatics(reportId);
+    res.status(200).send(result);
+  }
+);
+const getHistory = catchAsync(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const reportId = req.user?.id as mongoose.Types.ObjectId;
+    const dateParam = req.query.date as string; // Assuming 'date' is the name of the parameter
+    const dateObject = new Date(dateParam);
+
+    const result = await reporterService.getHistory(reportId, dateObject);
+    res.status(200).send(result);
   }
 );
 
@@ -88,4 +104,6 @@ export const ReporterController = {
   updateReport,
   invitation,
   getReportById,
+  getStatics,
+  getHistory,
 };

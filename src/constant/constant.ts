@@ -16,7 +16,7 @@ export const user_category_enum = [
   'education',
   'law&order',
   'entertainment',
-  'Politics',
+  'politics',
 ];
 export const user_sub_category_enum = [
   '',

@@ -1,6 +1,9 @@
+import mongoose from 'mongoose';
 import ApiError from '../errorHandler/ApiError';
 import { INewsReport, IUpdateReport } from '../interface/newsReport.interface';
 import NewsReport from '../models/newsReport.mo';
+
+const ObjectId = mongoose.Types.ObjectId;
 
 const createReport = async (data: INewsReport) => {
   const { title, subtitle, photos, description, sub_category, user } = data;
@@ -17,7 +20,7 @@ const createReport = async (data: INewsReport) => {
     photos,
     description,
     category: user.category,
-    sub_category: user.sub_category,
+    sub_category: sub_category,
     status: 'pending',
   });
   const result = await report.save();
@@ -37,5 +40,66 @@ const updateReport = async (data: IUpdateReport) => {
   );
   return result;
 };
+const getStatics = async (id: mongoose.Types.ObjectId) => {
+  const pipeline = [
+    {
+      $match: {
+        reporterId: new ObjectId(id),
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalCount: { $sum: 1 },
+        pendingCount: {
+          $sum: { $cond: [{ $eq: ['$status', 'pending'] }, 1, 0] },
+        },
+        rejectedCount: {
+          $sum: { $cond: [{ $eq: ['$status', 'rejected'] }, 1, 0] },
+        },
+        approvedCount: {
+          $sum: { $cond: [{ $eq: ['$status', 'approved'] }, 1, 0] },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        totalCount: 1,
+        counts: {
+          pending: '$pendingCount',
+          rejected: '$rejectedCount',
+          approved: '$approvedCount',
+        },
+      },
+    },
+  ];
+  const result = await NewsReport.aggregate(pipeline);
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const todayMatch = {
+    $match: {
+      createdAt: { $gte: today },
+    },
+  };
+  const todayStatics = await NewsReport.aggregate([todayMatch, ...pipeline]);
+  return { totalStatics: result[0], todayStatics: todayStatics[0] || {} };
+};
+const getHistory = async (id: mongoose.Types.ObjectId, date: Date) => {
+  const result = await NewsReport.aggregate([
+    {
+      $match: {
+        reporterId: new ObjectId(id),
+        date,
+      },
+    },
+  ]);
+  return result;
+};
 
-export const reporterService = { createReport, updateReport };
+export const reporterService = {
+  createReport,
+  updateReport,
+  getStatics,
+  getHistory,
+};

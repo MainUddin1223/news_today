@@ -13,5 +13,7 @@ router
   .route('/reports')
   .get(verifyReporter, ReporterController.getMyAllReports);
 router.route('/invitation').put(verifyReporter, ReporterController.invitation);
+router.route('/statics').get(verifyReporter, ReporterController.getStatics);
+router.route('/history').get(verifyReporter, ReporterController.getHistory);
 
 export default { newsRouter: router };

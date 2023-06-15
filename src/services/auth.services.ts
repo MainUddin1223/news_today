@@ -35,7 +35,6 @@ const validateUser = async (email: string, password: string) => {
 
   const userData = findUser[0];
   if (!userData) {
-    // return { status: 400, success: false, message: 'Invalid email' };
     throw new ApiError(400, 'Your email is Invalid ');
   } else {
     const userPassword = userData.password;
@@ -57,7 +56,7 @@ const validateUser = async (email: string, password: string) => {
       const token = jwt.sign(payload, jwt_access_token as string, {
         expiresIn: '1d',
       });
-      return { status: 200, success: true, result: { userData, token } };
+      return { status: 200, success: true, result: { ...payload, token } };
     }
   }
 };
