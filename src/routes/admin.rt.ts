@@ -11,4 +11,7 @@ router
   .route('/invitation')
   .put(verifyAdmin, inviteApiValidation, andminRoutes.inviteEmployeeForRole);
 
+router.route('/statics').get(verifyAdmin, andminRoutes.overallStatics);
+router.route('/history').get(verifyAdmin, andminRoutes.getoneWeekHistory);
+
 export default { adminRouter: router };

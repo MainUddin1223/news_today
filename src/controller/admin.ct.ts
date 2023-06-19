@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { AuthenticatedRequest } from '../interface/auth.interface';
 import NewsReport from '../models/newsReport.mo';
-import { inviteForRole } from '../services/admin.services';
+import {
+  getHistory,
+  getOverallStatics,
+  inviteForRole,
+} from '../services/admin.services';
 import UserInfo from '../models/userInfo.mo';
 import catchAsync from '../errorHandler/catchAsync';
 
@@ -58,7 +62,7 @@ const getStuffByRole = catchAsync(
 );
 
 const getReportsByStatus = catchAsync(
-  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const { status } = req.query;
     const result = await NewsReport.aggregate([
       {
@@ -73,7 +77,22 @@ const getReportsByStatus = catchAsync(
       },
     ]);
     res.status(200).send(result);
-    next();
+  }
+);
+
+const overallStatics = catchAsync(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const result = await getOverallStatics();
+    res.status(200).send(result);
+  }
+);
+
+const getoneWeekHistory = catchAsync(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const { page = 1 } = req.params;
+
+    const result = await getHistory(page);
+    res.status(200).send(result);
   }
 );
 
@@ -81,4 +100,6 @@ export const andminRoutes = {
   getStuffByRole,
   getReportsByStatus,
   inviteEmployeeForRole,
+  overallStatics,
+  getoneWeekHistory,
 };
