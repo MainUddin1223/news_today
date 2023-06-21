@@ -63,13 +63,13 @@ const getStuffByRole = catchAsync(
 
 const getReportsByStatus = catchAsync(
   async (req: AuthenticatedRequest, res: Response) => {
-    const { status } = req.query;
+    // const { status } = req.query;
     const result = await NewsReport.aggregate([
-      {
-        $match: {
-          status,
-        },
-      },
+      // {
+      //   $match: {
+      //     status,
+      //   },
+      // },
       {
         $sort: {
           publishedDate: -1,
@@ -91,7 +91,7 @@ const getoneWeekHistory = catchAsync(
   async (req: AuthenticatedRequest, res: Response) => {
     const { page = 1 } = req.params;
 
-    const result = await getHistory(page);
+    const result = await getHistory(Number(page));
     res.status(200).send(result);
   }
 );
