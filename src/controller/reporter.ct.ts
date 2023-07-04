@@ -15,7 +15,8 @@ const invitation = catchAsync(
     const user = req.user as IUserPaylod;
     const result = await UserInfo.findOneAndUpdate(
       { userId: user._id, invitation: true },
-      { $set: { status: 'accepted', approval: 'approved', invitation: false } }
+      { $set: { status: 'accepted', approval: 'approved', invitation: false } },
+      { new: true }
     );
     res.status(200).send(result);
   }

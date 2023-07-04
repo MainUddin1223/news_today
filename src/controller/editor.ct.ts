@@ -22,7 +22,9 @@ const reviewReportsByEditor = catchAsync(
 const getallReports = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const user = req.user;
-    const result = await NewsReport.find({ category: user?.category });
+    const whereCondition =
+      user?.category === 'super' ? {} : { category: user?.category };
+    const result = await NewsReport.find(whereCondition);
     res.status(200).send(result);
     next();
   }
