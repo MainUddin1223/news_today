@@ -5,7 +5,8 @@ import { inviteApiValidation } from '../apiValidator/adminValidator';
 
 const router = express.Router();
 
-router.route('/get-stuff').get(verifyAdmin, andminRoutes.getStuffByRole);
+router.route('/reporters').get(verifyAdmin, andminRoutes.getReporters);
+router.route('/editors').get(verifyAdmin, andminRoutes.getEditors);
 router.route('/reports').get(verifyAdmin, andminRoutes.getReportsByStatus);
 router
   .route('/invitation')

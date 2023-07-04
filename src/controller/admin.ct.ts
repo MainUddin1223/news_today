@@ -18,15 +18,57 @@ const inviteEmployeeForRole = catchAsync(
   }
 );
 
-const getStuffByRole = catchAsync(
+const getReporters = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { role, limit = 50, page = 1 } = req.query;
+    const { limit = 50, page = 1 } = req.query;
     const limitValue = parseInt(limit.toString());
     const pageValue = parseInt(page.toString());
     const result = await UserInfo.aggregate([
       {
         $match: {
-          role: role,
+          role: 'reporter',
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $addFields: {
+          user: { $arrayElemAt: ['$user', 0] },
+        },
+      },
+      {
+        $project: {
+          userId: 0,
+          'user.id': 0,
+          'user.password': 0,
+        },
+      },
+      {
+        $skip: (pageValue - 1) * limitValue,
+      },
+      {
+        $limit: limitValue,
+      },
+    ]);
+    res.status(200).send(result);
+    next();
+  }
+);
+const getEditors = catchAsync(
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const { limit = 50, page = 1 } = req.query;
+    const limitValue = parseInt(limit.toString());
+    const pageValue = parseInt(page.toString());
+    const result = await UserInfo.aggregate([
+      {
+        $match: {
+          role: { $in: ['editor', 'sub-editor'] },
         },
       },
       {
@@ -97,9 +139,10 @@ const getoneWeekHistory = catchAsync(
 );
 
 export const andminRoutes = {
-  getStuffByRole,
+  getReporters,
   getReportsByStatus,
   inviteEmployeeForRole,
   overallStatics,
   getoneWeekHistory,
+  getEditors,
 };

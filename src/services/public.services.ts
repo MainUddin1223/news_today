@@ -4,6 +4,7 @@ const getNewsByCategoryService = async (
   category: string,
   sub_category: string
 ) => {
+  console.log('------------------');
   const pipeline =
     sub_category == 'all'
       ? [
