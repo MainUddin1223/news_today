@@ -1,19 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import NewsReport from '../models/newsReport.mo';
 import catchAsync from '../errorHandler/catchAsync';
 import { publicServices } from '../services/public.services';
+import pick from '../utilis/pick';
+import { newsFiltarableFields, paiganationFields } from '../constant/constant';
 
 const getAllNews = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { page = 1, limit = 25 } = req.query;
-    const pageNumber = parseInt(page as string);
-    const limitNumber = parseInt(limit as string);
-    const skip = (pageNumber - 1) * limitNumber;
-    const result = await NewsReport.find({ status: 'approved' })
-      .skip(skip)
-      .limit(limitNumber);
-
-    res.status(200).send(result);
+    const paignationOptions = pick(req.query, paiganationFields);
+    const filters = pick(req.query, newsFiltarableFields);
+    const data = await publicServices.getAllNews(paignationOptions, filters);
+    res.status(200).send({ meta: data.meta, result: data.data });
     next();
   }
 );

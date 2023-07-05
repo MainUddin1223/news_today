@@ -38,3 +38,10 @@ export const user_approval_enum = [
 export const news_status_enum = ['pending', 'approved', 'rejected', 'hidden'];
 
 export const news_type_enum = ['featured', 'spotlight', 'normal', 'top'];
+export const paiganationFields = ['page', 'limit', 'sortBy', 'sortOrder'];
+export const newsFiltarableFields = [
+  'searchTerm',
+  'category',
+  'newsType',
+  'sub_category',
+];

@@ -23,7 +23,7 @@ const inviteForRole = async (data: IInviteForRole) => {
     );
     return userInfo;
   } else {
-    throw new ApiError(500, 'Something went wrong');
+    throw new ApiError(500, 'The email not registered yet');
   }
 };
 

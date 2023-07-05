@@ -1,4 +1,14 @@
+import { SortOrder } from 'mongoose';
+import { INewsReport } from '../interface/newsReport.interface';
 import NewsReport from '../models/newsReport.mo';
+import {
+  IGenericResponse,
+  IPaginationOptions,
+  filterType,
+  paginationHelpers,
+} from '../utilis/paigination';
+
+const newsSearchField = ['title', 'description'];
 
 const getNewsByCategoryService = async (
   category: string,
@@ -70,4 +80,53 @@ const getNewsByCategoryService = async (
   ]);
   return result;
 };
-export const publicServices = { getNewsByCategoryService };
+const getAllNews = async (
+  paignationOptions: IPaginationOptions,
+  filter: filterType
+): Promise<IGenericResponse<INewsReport[]>> => {
+  const { searchTerm, ...filtersData } = filter;
+  console.log(searchTerm);
+  const andCondition = [];
+  if (searchTerm) {
+    andCondition.push({
+      $or: newsSearchField.map(field => ({
+        [field]: {
+          $regex: searchTerm,
+          $options: 'i',
+        },
+      })),
+    });
+  }
+  if (Object.keys(filtersData).length) {
+    andCondition.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+        status: 'approved',
+      })),
+    });
+  }
+
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePaignation(paignationOptions);
+  const sortCondition: { [key: string]: SortOrder } = {};
+
+  if (sortBy && sortOrder) {
+    sortCondition[sortBy] = sortOrder;
+  }
+  const whereCondition =
+    andCondition.length > 0 ? { $and: andCondition } : { status: 'approved' };
+  const result = await NewsReport.find(whereCondition)
+    .sort(sortCondition)
+    .skip(skip)
+    .limit(limit);
+  const total = await NewsReport.countDocuments(whereCondition);
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
+export const publicServices = { getNewsByCategoryService, getAllNews };
